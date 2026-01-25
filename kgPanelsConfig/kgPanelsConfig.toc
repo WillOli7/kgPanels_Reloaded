@@ -4,7 +4,7 @@
 ## Title: kgPanelsConfig
 ## Author: kagaro, EvilElvis, Adna
 ## Dependencies: kgPanels
-## Version: 1.0.0
+## Version: 0.2.0
 ## X-Category: Interface Enhancements
 ## X-License: All Rights Reserved
 ## X-Curse-Project-ID: 1444518
@@ -31,3 +31,4 @@ kgPanelGuideFrame.lua
 ArtHelper.lua
 PanelHelper.lua
 LayoutHelper.lua
+
