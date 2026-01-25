@@ -1,0 +1,33 @@
+## Interface: 120000
+## LoadOnDemand: 1
+## Notes: Configuration for kgPanels
+## Title: kgPanelsConfig
+## Author: kagaro, EvilElvis, Adna
+## Dependencies: kgPanels
+## Version: 1.0.0
+## X-Category: Interface Enhancements
+## X-License: All Rights Reserved
+## X-Curse-Project-ID: 1444518
+## IconTexture: Interface\AddOns\kgPanels\media\icon.tga
+## OptionalDeps: Ace3, LibSharedMedia-3.0, AceGUI-3.0-SharedMediaWidgets
+
+## Category: User Interface
+## Category-deDE: Benutzerinterface
+## Category-esES: Interfaz de usuario
+## Category-esMX: Interfaz de usuario
+## Category-frFR: Interface utilisateur
+## Category-itIT: Interfaccia utente
+## Category-koKR: 사용자 인터페이스
+## Category-ptBR: Interface do usuário
+## Category-ruRU: Интерфейс пользователя
+## Category-zhCN: 用户界面
+## Category-zhTW: 使用者介面
+
+embeds.xml
+Locales.xml
+
+kgPanelsConfig.lua
+kgPanelGuideFrame.lua
+ArtHelper.lua
+PanelHelper.lua
+LayoutHelper.lua
