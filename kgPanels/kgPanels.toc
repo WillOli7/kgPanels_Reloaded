@@ -1,7 +1,7 @@
 ## Interface: 120000
 ## Notes: Create panels for customizing your UI, sucessor to eePanels
 ## Title: kgPanels
-## Version: 1.0.0
+## Version: 0.2.0
 ## Author: kagaro, Adna
 ## SavedVariables: kgPanelsDB
 ## X-Category: Interface Enhancements
@@ -27,3 +27,4 @@ Libs\LibDualSpec-1.0\LibDualSpec-1.0.lua
 
 embeds.xml
 kgPanels.lua
+
