@@ -1,7 +1,7 @@
 ## Interface: 120000
 ## Notes: Create panels for customizing your UI, sucessor to eePanels
 ## Title: kgPanels_Reloaded
-## Version: 0.2.2
+## Version: v0.2.3
 ## Author: kagaro, Adna
 ## SavedVariables: kgPanelsDB
 ## X-Category: Interface Enhancements
