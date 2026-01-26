@@ -1,52 +1,64 @@
 # kgPanels_Reloaded
 
-**kgPanels_Reloaded** is a modern, actively maintained continuation of the original **kgPanels** addon for World of Warcraft.
+**kgPanels_Reloaded** is a modern, community-maintained continuation of the original **kgPanels** addon for World of Warcraft.
 
-This project aims to preserve the flexibility and power of kgPanels while ensuring compatibility with current and future game versions, fixing legacy issues, and providing long-term maintenance for the community.
+The goal of this project is to preserve the flexibility and power of kgPanels while ensuring compatibility with current and future game versions, fixing legacy issues, and providing ongoing maintenance.
 
 ---
 
 ## ✨ Features
 
 - Create and manage fully customizable UI panels
-- Flexible framework for layouts, textures, and borders
-- Compatible with existing kgPanels configurations
-- Modernized codebase for current WoW versions
-- Community-focused maintenance and improvements
+- Flexible system for layouts, textures, and borders
+- Compatibility with existing kgPanels configurations
+- Updated codebase for modern WoW versions
+- Community-driven maintenance and improvements
 
 ---
 
 ## 📦 Installation
 
-### Manual Installation
-1. Download the latest release or clone this repository.
-2. Extract the folders into your WoW AddOns directory:
+1. Download the latest release.
+2. Extract the following folders into:
 World of Warcraft/retail/Interface/AddOns/
 
-3. You should have:
+3. Ensure you have:
 kgPanels_Reloaded
 kgPanelsConfig_Reloaded
 
-4. Launch the game and enable the addons from the AddOns menu.
+4. Launch the game and enable the addons.
+
+## ⚠️ Important – Configuration file rename
+
+If you were previously using the original **kgPanels** addon, you must rename your existing configuration file before launching the game.
+
+Please rename:
+
+World of Warcraft\retail_\WTF\Account\ACCOUNTBNET\SavedVariables\kgPanels.lua  
+to  
+World of Warcraft\retail_\WTF\Account\ACCOUNTBNET\SavedVariables\kgPanels_Reloaded.lua
+
+This ensures that your existing profiles and layouts are correctly loaded by **kgPanels_Reloaded**.
+
+Failure to rename this file may result in missing or reset configurations.
 
 ---
 
 ## ⚙️ Usage
 
-- Open the configuration UI:
+Open the configuration interface with:
 /kgpanels config
 
-- Use the interface to create, edit, and manage panels.
 
-Existing profiles from the original **kgPanels** addon are automatically detected and reused, allowing a seamless transition.
+Use the UI to create, edit, and manage panels.
 
 ---
 
 ## 🔄 Compatibility
 
-- Designed as a drop-in continuation of the original **kgPanels**
-- Uses the same SavedVariables to preserve existing layouts
-- No manual migration required for most users
+- Designed as a continuation of the original **kgPanels**
+- Preserves existing layouts and profiles
+- Minimal manual migration required
 
 ---
 
@@ -54,43 +66,21 @@ Existing profiles from the original **kgPanels** addon are automatically detecte
 
 🚧 **Work in progress**
 
-This project is actively being developed.  
-Expect ongoing fixes, refactoring, and improvements.
-
-Feedback, testing, and contributions are welcome.
-
----
-
-## 🤝 Contributing
-
-Contributions are welcome!
-
-If you want to help:
-- Report issues
-- Suggest improvements
-- Submit pull requests
-
-Please keep changes focused and well-documented.
+The addon is actively developed.  
+Bug fixes, refactoring, and improvements are ongoing.
 
 ---
 
 ## 📜 Credits
 
 - **kagaro** — Original author of kgPanels  
-- **Community contributors** — Bug fixes, testing, and maintenance
+- **Community contributors** — Testing, fixes, and maintenance
 
-This project is an **unofficial continuation** created to support the community.
-
----
-
-## 📄 License
-
-All rights reserved.  
-This repository is provided for community use and maintenance purposes.
+This is an unofficial continuation created to support the community.
 
 ---
 
 ## 🔗 Links
 
-- Original addon: https://www.curseforge.com/wow/addons/kg-panels
-- GitHub repository: https://github.com/WillOli7/kgPanels_Reloaded
+- Original addon: https://www.curseforge.com/wow/addons/kg-panels  
+- GitHub: https://github.com/WillOli7/kgPanels_Reloaded
