@@ -1,7 +1,7 @@
-## Interface: 120000
+## Interface: 120000, 120001
 ## Notes: Configuration for kgPanels
 ## Title: kgPanelsConfig_Reloaded
-## Version: v0.2.3
+## Version: v0.3.0
 ## Author: kagaro, EvilElvis, Adna
 ## RequiredDeps: kgPanels_Reloaded
 ## X-Category: Interface Enhancements
