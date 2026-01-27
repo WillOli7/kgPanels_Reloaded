@@ -1,10 +1,9 @@
 ## Interface: 120000
-## LoadOnDemand: 1
 ## Notes: Configuration for kgPanels
 ## Title: kgPanelsConfig_Reloaded
 ## Version: v0.2.3
 ## Author: kagaro, EvilElvis, Adna
-## Dependencies: kgPanels_Reloaded
+## RequiredDeps: kgPanels_Reloaded
 ## X-Category: Interface Enhancements
 ## X-License: All Rights Reserved
 ## X-Curse-Project-ID: 1444518

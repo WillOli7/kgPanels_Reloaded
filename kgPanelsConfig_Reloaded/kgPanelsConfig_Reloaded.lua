@@ -109,7 +109,7 @@ local artworkTypes = {
 function kgPanelsConfig:makeOptions()
 return {
 	type = "group",
-	icon = "Interface\\Addons\\kgPanels\\icon.tga",--isn't used atm, but might as well set it
+	icon = "Interface\\Addons\\kgPanels_Reloaded\\icon.tga",--isn't used atm, but might as well set it
 	name = "kgPanels",
 	childGroups = "tree",
 	args = {
@@ -587,6 +587,7 @@ function kgPanelsConfig:OnInitialize()
 	self.db.RegisterCallback(self, "OnProfileChanged", "OnProfileChanged")
 	self.db.RegisterCallback(self, "OnProfileCopied", "OnProfileChanged")
 	self.db.RegisterCallback(self, "OnProfileReset", "OnProfileChanged")
+	
 	-- Register our option table
 	optionTable = self:makeOptions()
 	optionTable.args.profile = LibStub("AceDBOptions-3.0"):GetOptionsTable(kgPanels.db)
@@ -596,7 +597,12 @@ function kgPanelsConfig:OnInitialize()
 			LibDualSpec:EnhanceOptions(optionTable.args.profile, kgPanels.db)
 		end
 	end
+	
 	LibStub("AceConfig-3.0"):RegisterOptionsTable("kgPanelsConfig", optionTable)
+	
+	-- Add entry to Blizzard Options (Interface -> AddOns)
+	LibStub("AceConfigDialog-3.0"):AddToBlizOptions("kgPanelsConfig", "kgPanels_Reloaded")
+	
 	-- LAYOUT MENU SHORTCUTS
 	-- Holds layout menus.  Do not flush
 	self.layoutList = optionTable.args.general.args.layouts.args
