@@ -16,6 +16,7 @@ local kgPanelsConfig = kgPanels:NewModule("kgPanelsConfig")
 local L = LibStub("AceLocale-3.0"):GetLocale("kgPanels", false)
 local cfgreg = LibStub("AceConfigRegistry-3.0")
 local serializer = LibStub("AceSerializer-3.0")
+local ROOT_FOLDER = "__ROOT__"
 
 local function IsClassic()
 	return WOW_PROJECT_ID == WOW_PROJECT_CLASSIC
@@ -889,6 +890,13 @@ function kgPanelsConfig:EnsureFoldersTable(layoutName)
 	return kgPanels.db.global.foldersByLayout[layoutName]
 end
 
+function kgPanelsConfig:GetPanelFolder(panelData)
+	if type(panelData) ~= "table" or not panelData.folder or panelData.folder == "" then
+		return ROOT_FOLDER
+	end
+	return panelData.folder
+end
+
 function kgPanelsConfig:DeleteFolder(folderName, layoutName)
 	if not folderName or folderName == "" then return end
 	if folderName == ROOT_FOLDER then return end
@@ -900,7 +908,7 @@ function kgPanelsConfig:DeleteFolder(folderName, layoutName)
 	-- Move panels back to Root
 	for panelName, panelData in pairs(layoutdata) do
 		if type(panelData) == "table" then
-			local f = GetPanelFolder(panelData)
+			local f = self:GetPanelFolder(panelData)
 			if f == folderName then
 				panelData.folder = nil
 			end
@@ -929,7 +937,7 @@ function kgPanelsConfig:RenameFolder(oldName, newName, layoutName)
 	-- Move panels to new folder name
 	for panelName, panelData in pairs(layoutdata) do
 		if type(panelData) == "table" then
-			local f = GetPanelFolder(panelData)
+			local f = self:GetPanelFolder(panelData)
 			if f == oldName then
 				panelData.folder = newName
 			end
