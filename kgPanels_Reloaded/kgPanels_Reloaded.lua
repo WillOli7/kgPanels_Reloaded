@@ -377,7 +377,7 @@ local function fetchArt(art,artType)
 		return LSM:Fetch("background",art,true)
 	end
 	if art ~= l_None then
-		kgPanels:Print("Failed to find artwork "..art.." type "..artType)
+		kgPanels:Print(string.format(L["Failed to find artwork %s (type %s)."], tostring(art), tostring(artType)))
 	end
 	return nil
 end
