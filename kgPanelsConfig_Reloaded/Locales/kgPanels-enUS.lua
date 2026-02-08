@@ -1,4 +1,4 @@
-﻿--[[
+--[[
 Default Locale is English, those providing translations, just add it to the appropiate lua file
 ]]
 
@@ -453,3 +453,10 @@ L["Panels inside will be moved to Root."] = "Panels inside will be moved to Root
 L["Delete this folder? Panels inside will be moved to Root."] = "Delete this folder? Panels inside will be moved to Root."
 L["Folder '%s' (%d panel(s))."] = "Folder '%s' (%d panel(s))."
 L["Root (%d panel(s))."] = "Root (%d panel(s))."
+
+L["Folder Settings"] = "Folder Settings"
+L["Current folder: %s"] = "Current folder: %s"
+L["Folder Name (create / assign)"] = "Folder Name (create / assign)"
+L["Move to folder"] = "Move to folder"
+L["Move"] = "Move"
+L["OK"] = "OK"

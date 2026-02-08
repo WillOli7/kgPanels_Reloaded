@@ -409,6 +409,8 @@ function kgPanelsConfig:CreatePanelMenu(panelName, panelData, isDefault, parentA
 	local _copy_src = nil
 	local _panel_src = nil
 	local _rename = nil
+	local _folderAssignInput = nil
+	local _folderMoveSelection = nil
 	local _default = isDefault
 	-- Create the panel menu
 	local tempPanelMenu = {
@@ -619,6 +621,90 @@ function kgPanelsConfig:CreatePanelMenu(panelName, panelData, isDefault, parentA
 						end,
 						confirmText = L["There is already a panel with that name. Overwrite?"],
 					}
+				},
+			},
+			folderOpts = {
+				type = "group",
+				name = L["Folder Settings"],
+				guiInline = true,
+				order = 2,
+				args = {
+					currentFolder = {
+						type = "description",
+						name = function()
+							local current = kgPanelsConfig:GetPanelFolder(panelData)
+							local label = (current == ROOT_FOLDER) and L["Root"] or current
+							return string.format(L["Current folder: %s"], label)
+						end,
+						order = 1,
+						width = "full",
+					},
+					folderSpace = {
+						type = "description",
+						name = " ",
+						order = 2,
+						width = "full",
+					},
+					assignFolderInput = {
+						type = "input",
+						name = L["Folder Name (create / assign)"],
+						order = 3,
+						width = "full",
+						get = function() return _folderAssignInput or "" end,
+						set = function(info, val) _folderAssignInput = val end,
+						disabled = function()
+							return _default or type(panelData) ~= "table"
+						end,
+					},
+					assignFolderExec = {
+						type = "execute",
+						name = L["OK"],
+						order = 4,
+						width = "half",
+						disabled = function()
+							local target = strtrim(_folderAssignInput or "")
+							return _default or type(panelData) ~= "table" or target == ""
+						end,
+						func = function()
+							local target = strtrim(_folderAssignInput or "")
+							if target == "" then return end
+							kgPanelsConfig:MovePanelToFolder(panelName, target, kgPanelsConfig.activeLayout)
+							_folderMoveSelection = target
+							_folderAssignInput = nil
+						end,
+					},
+					moveFolderSelect = {
+						type = "select",
+						name = L["Move to folder"],
+						order = 5,
+						style = "dropdown",
+						width = "full",
+						values = function()
+							return kgPanelsConfig:GetLayoutFolders(kgPanelsConfig.activeLayout, true)
+						end,
+						get = function()
+							if _folderMoveSelection ~= nil then
+								return _folderMoveSelection
+							end
+							return kgPanelsConfig:GetPanelFolder(panelData)
+						end,
+						set = function(info, val) _folderMoveSelection = val end,
+						disabled = function()
+							return _default or type(panelData) ~= "table"
+						end,
+					},
+					moveFolderExec = {
+						type = "execute",
+						name = L["Move"],
+						order = 6,
+						width = "half",
+						disabled = function()
+							return _default or type(panelData) ~= "table" or not _folderMoveSelection
+						end,
+						func = function()
+							kgPanelsConfig:MovePanelToFolder(panelName, _folderMoveSelection, kgPanelsConfig.activeLayout)
+						end,
+					},
 				},
 			},
 			colorOpts = {

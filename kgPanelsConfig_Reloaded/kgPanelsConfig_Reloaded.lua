@@ -16,6 +16,7 @@ local kgPanelsConfig = kgPanels:NewModule("kgPanelsConfig")
 local L = LibStub("AceLocale-3.0"):GetLocale("kgPanels", false)
 local cfgreg = LibStub("AceConfigRegistry-3.0")
 local serializer = LibStub("AceSerializer-3.0")
+local ROOT_FOLDER = "__ROOT__"
 
 local function IsClassic()
 	return WOW_PROJECT_ID == WOW_PROJECT_CLASSIC
@@ -889,6 +890,13 @@ function kgPanelsConfig:EnsureFoldersTable(layoutName)
 	return kgPanels.db.global.foldersByLayout[layoutName]
 end
 
+function kgPanelsConfig:GetPanelFolder(panelData)
+	if type(panelData) ~= "table" or not panelData.folder or panelData.folder == "" then
+		return ROOT_FOLDER
+	end
+	return panelData.folder
+end
+
 function kgPanelsConfig:DeleteFolder(folderName, layoutName)
 	if not folderName or folderName == "" then return end
 	if folderName == ROOT_FOLDER then return end
@@ -900,7 +908,7 @@ function kgPanelsConfig:DeleteFolder(folderName, layoutName)
 	-- Move panels back to Root
 	for panelName, panelData in pairs(layoutdata) do
 		if type(panelData) == "table" then
-			local f = GetPanelFolder(panelData)
+			local f = self:GetPanelFolder(panelData)
 			if f == folderName then
 				panelData.folder = nil
 			end
@@ -929,7 +937,7 @@ function kgPanelsConfig:RenameFolder(oldName, newName, layoutName)
 	-- Move panels to new folder name
 	for panelName, panelData in pairs(layoutdata) do
 		if type(panelData) == "table" then
-			local f = GetPanelFolder(panelData)
+			local f = self:GetPanelFolder(panelData)
 			if f == oldName then
 				panelData.folder = newName
 			end
@@ -941,6 +949,83 @@ function kgPanelsConfig:RenameFolder(oldName, newName, layoutName)
 	t[oldName] = nil
 	t[newName] = true
 
+	cfgreg:NotifyChange("kgPanelsConfig")
+end
+
+function kgPanelsConfig:GetLayoutFolders(layoutName, includeRoot)
+	layoutName = layoutName or self.activeLayout
+	local values = {}
+	local set = {}
+
+	if includeRoot then
+		values[ROOT_FOLDER] = L["Root"]
+	end
+
+	if not layoutName or layoutName == L["None"] then
+		return values
+	end
+
+	local saved = kgPanels.db.global.foldersByLayout and kgPanels.db.global.foldersByLayout[layoutName]
+	if saved then
+		for folderName, enabled in pairs(saved) do
+			if enabled and folderName and folderName ~= "" then
+				set[folderName] = true
+			end
+		end
+	end
+
+	local layoutData = kgPanels.db.global.layouts and kgPanels.db.global.layouts[layoutName]
+	if layoutData then
+		for _, panelData in pairs(layoutData) do
+			if type(panelData) == "table" then
+				set[self:GetPanelFolder(panelData)] = true
+			end
+		end
+	end
+
+	set[ROOT_FOLDER] = nil
+
+	local list = {}
+	for folderName in pairs(set) do
+		table.insert(list, folderName)
+	end
+	table.sort(list)
+
+	for _, folderName in ipairs(list) do
+		values[folderName] = folderName
+	end
+
+	return values
+end
+
+function kgPanelsConfig:EnsureFolderExists(folderName, layoutName)
+	folderName = strtrim(folderName or "")
+	if folderName == "" or folderName == ROOT_FOLDER then return end
+
+	layoutName = layoutName or self.activeLayout
+	local folders = self:EnsureFoldersTable(layoutName)
+	folders[folderName] = true
+end
+
+function kgPanelsConfig:MovePanelToFolder(panelName, folderName, layoutName)
+	if not panelName or panelName == "" then return end
+
+	layoutName = layoutName or self.activeLayout
+	local layoutData = kgPanels.db.global.layouts and kgPanels.db.global.layouts[layoutName]
+	if not layoutData then return end
+
+	local panelData = layoutData[panelName]
+	if type(panelData) ~= "table" then return end
+
+	folderName = strtrim(folderName or "")
+	if folderName == "" or folderName == ROOT_FOLDER then
+		panelData.folder = nil
+	else
+		self:EnsureFolderExists(folderName, layoutName)
+		panelData.folder = folderName
+	end
+
+	self:InitPanelMenus()
 	cfgreg:NotifyChange("kgPanelsConfig")
 end
 

@@ -1,4 +1,4 @@
-﻿--[[
+--[[
 Korean
 ]]
 local L = LibStub("AceLocale-3.0"):NewLocale("kgPanels","koKR")
@@ -477,3 +477,9 @@ L["Y Offset"] = "Y 좌표"
 L["Y offset. NOTE: positive for right, negative for left."] = "정중앙에서의 Y 좌표를 설정합니다. 주의: 우측으로는 양수를 좌측으로는 음수를 입력하십시오."
 L["Y offsetting, positive for up, negative for down."] = "Y 좌표를 설정합니다. 위로는 양수를 아래로는 음수를 입력하십시오."
 
+L["Folder Settings"] = "Folder Settings"
+L["Current folder: %s"] = "Current folder: %s"
+L["Folder Name (create / assign)"] = "Folder Name (create / assign)"
+L["Move to folder"] = "Move to folder"
+L["Move"] = "Move"
+L["OK"] = "OK"

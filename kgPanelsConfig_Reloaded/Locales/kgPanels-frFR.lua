@@ -479,3 +479,10 @@ L["Panels inside will be moved to Root."] = "Les panneaux du dossier seront dép
 L["Delete this folder? Panels inside will be moved to Root."] = "Supprimer ce dossier ? Les panneaux seront déplacés vers Racine."
 L["Folder '%s' (%d panel(s))."] = "Dossier '%s' (%d panneau(x))."
 L["Root (%d panel(s))."] = "Racine (%d panneau(x))."
+
+L["Folder Settings"] = "Paramètres du dossier"
+L["Current folder: %s"] = "Dossier actuel : %s"
+L["Folder Name (create / assign)"] = "Nom du dossier (créer / assigner)"
+L["Move to folder"] = "Déplacer dans le dossier"
+L["Move"] = "Déplacer"
+L["OK"] = "OK"

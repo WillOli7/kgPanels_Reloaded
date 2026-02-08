@@ -1,4 +1,4 @@
-﻿--[[
+--[[
 Russian
 ]]
 local L = LibStub("AceLocale-3.0"):NewLocale("kgPanels","ruRU")
@@ -460,3 +460,9 @@ L["Y Offset"] = "Смещение по Y"
 L["Y offset. NOTE: positive for right, negative for left."] = "Y offset. P.S: Позитив на право, негатив на лево."
 L["Y offsetting, positive for up, negative for down."] = "Y offsetting, позитив на верх, негатив вниз."
 
+L["Folder Settings"] = "Folder Settings"
+L["Current folder: %s"] = "Current folder: %s"
+L["Folder Name (create / assign)"] = "Folder Name (create / assign)"
+L["Move to folder"] = "Move to folder"
+L["Move"] = "Move"
+L["OK"] = "OK"
