@@ -1,4 +1,4 @@
-﻿--[[
+--[[
 German]]
 local L = LibStub("AceLocale-3.0"):NewLocale("kgPanels","deDE")
 if not L then return end
@@ -383,3 +383,9 @@ L["Y Offset"] = "Y-Verschiebung"
 L["Y offset. NOTE: positive for right, negative for left."] = "Y -Verschiebung. Anmerkung: Positiv für nach oben, negativ für nach unten."
 L["Y offsetting, positive for up, negative for down."] = "Y-Verschiebung. Anmerkung: Positiv für nach oben, negativ für nach unten."
 
+L["Folder Settings"] = "Folder Settings"
+L["Current folder: %s"] = "Current folder: %s"
+L["Folder Name (create / assign)"] = "Folder Name (create / assign)"
+L["Move to folder"] = "Move to folder"
+L["Move"] = "Move"
+L["OK"] = "OK"

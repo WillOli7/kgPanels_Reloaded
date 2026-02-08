@@ -952,6 +952,83 @@ function kgPanelsConfig:RenameFolder(oldName, newName, layoutName)
 	cfgreg:NotifyChange("kgPanelsConfig")
 end
 
+function kgPanelsConfig:GetLayoutFolders(layoutName, includeRoot)
+	layoutName = layoutName or self.activeLayout
+	local values = {}
+	local set = {}
+
+	if includeRoot then
+		values[ROOT_FOLDER] = L["Root"]
+	end
+
+	if not layoutName or layoutName == L["None"] then
+		return values
+	end
+
+	local saved = kgPanels.db.global.foldersByLayout and kgPanels.db.global.foldersByLayout[layoutName]
+	if saved then
+		for folderName, enabled in pairs(saved) do
+			if enabled and folderName and folderName ~= "" then
+				set[folderName] = true
+			end
+		end
+	end
+
+	local layoutData = kgPanels.db.global.layouts and kgPanels.db.global.layouts[layoutName]
+	if layoutData then
+		for _, panelData in pairs(layoutData) do
+			if type(panelData) == "table" then
+				set[self:GetPanelFolder(panelData)] = true
+			end
+		end
+	end
+
+	set[ROOT_FOLDER] = nil
+
+	local list = {}
+	for folderName in pairs(set) do
+		table.insert(list, folderName)
+	end
+	table.sort(list)
+
+	for _, folderName in ipairs(list) do
+		values[folderName] = folderName
+	end
+
+	return values
+end
+
+function kgPanelsConfig:EnsureFolderExists(folderName, layoutName)
+	folderName = strtrim(folderName or "")
+	if folderName == "" or folderName == ROOT_FOLDER then return end
+
+	layoutName = layoutName or self.activeLayout
+	local folders = self:EnsureFoldersTable(layoutName)
+	folders[folderName] = true
+end
+
+function kgPanelsConfig:MovePanelToFolder(panelName, folderName, layoutName)
+	if not panelName or panelName == "" then return end
+
+	layoutName = layoutName or self.activeLayout
+	local layoutData = kgPanels.db.global.layouts and kgPanels.db.global.layouts[layoutName]
+	if not layoutData then return end
+
+	local panelData = layoutData[panelName]
+	if type(panelData) ~= "table" then return end
+
+	folderName = strtrim(folderName or "")
+	if folderName == "" or folderName == ROOT_FOLDER then
+		panelData.folder = nil
+	else
+		self:EnsureFolderExists(folderName, layoutName)
+		panelData.folder = folderName
+	end
+
+	self:InitPanelMenus()
+	cfgreg:NotifyChange("kgPanelsConfig")
+end
+
 
 function kgPanelsConfig:UpdatePanel(name,w,h,x,y)
 	local layoutdata = kgPanels.db.global.layouts[self.activeLayout]

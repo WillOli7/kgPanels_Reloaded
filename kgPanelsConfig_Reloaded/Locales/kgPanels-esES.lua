@@ -1,4 +1,4 @@
-﻿--[[
+--[[
 Spanish
 ]]
 local L = LibStub("AceLocale-3.0"):NewLocale("kgPanels","esES")
@@ -446,3 +446,9 @@ L["Y Offset"] = "Compensación de Y"
 L["Y offset. NOTE: positive for right, negative for left."] = "Compensación de Y. NOTA: Positivo para derecha, negativo para izquierda."
 L["Y offsetting, positive for up, negative for down."] = "Compensación de Y, positivo para subirlo, negativo para bajarlo."
 
+L["Folder Settings"] = "Folder Settings"
+L["Current folder: %s"] = "Current folder: %s"
+L["Folder Name (create / assign)"] = "Folder Name (create / assign)"
+L["Move to folder"] = "Move to folder"
+L["Move"] = "Move"
+L["OK"] = "OK"

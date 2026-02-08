@@ -725,3 +725,9 @@ L["Y offset. NOTE: positive for right, negative for left."] = "Y offset. NOTE: P
 --[[Translation missing --]]
 L["Y offsetting, positive for up, negative for down."] = "Y offsetting, positive for up, negative for down."
 
+L["Folder Settings"] = "Folder Settings"
+L["Current folder: %s"] = "Current folder: %s"
+L["Folder Name (create / assign)"] = "Folder Name (create / assign)"
+L["Move to folder"] = "Move to folder"
+L["Move"] = "Move"
+L["OK"] = "OK"
