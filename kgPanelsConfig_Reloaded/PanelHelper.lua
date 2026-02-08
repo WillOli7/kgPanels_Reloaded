@@ -65,6 +65,20 @@ local copy_list = {
 local borderArt = {}
 local bgArt = {}
 local tostring = tostring
+
+-- =========================
+-- Folder helpers
+-- =========================
+local ROOT_FOLDER = "__ROOT__"
+
+local function GetPanelFolder(panelData)
+	-- If user didn't assign a folder, it's Root
+	if type(panelData) ~= "table" or not panelData.folder or panelData.folder == "" then
+		return ROOT_FOLDER
+	end
+	return panelData.folder
+end
+
 -- shared media font support
 if SharedMedia and SharedMedia.HashTable then
 	local lst = SharedMedia:HashTable("font")
@@ -163,14 +177,203 @@ end
 	-- Generate our panel menus for the active layout
 ]]
 function kgPanelsConfig:InitPanelMenus()
-	local activePanels = {}
-	local layoutdata = kgPanels.db.global.layouts[self.activeLayout] or {}
-	for k,v in pairs(layoutdata) do
-		self.activePanels[k] = v
-		self.panelNames[k] = k
-		kgPanelsConfig:CreatePanelMenu(k,v)
+	local layoutName = self.activeLayout
+	local layoutdata = kgPanels.db.global.layouts[layoutName] or {}
+
+	-- Reset runtime lists
+	self.activePanels = {}
+	self.panelNames = {}
+
+	-- Clean dynamic entries in the "Active Panels" tree (keep static UI groups)
+	for key in pairs(self.panelList) do
+		if key ~= "panelCreation" and key ~= "folderCreation" then
+			self.panelList[key] = nil
+		end
 	end
+
+	-- Group panels by folder
+	local folders = {} -- folders[folderName] = { panelName1, panelName2, ... }
+	for panelName, panelData in pairs(layoutdata) do
+		if type(panelData) == "table" then
+			self.activePanels[panelName] = panelData
+			self.panelNames[panelName] = panelName
+
+			local folderName = GetPanelFolder(panelData)
+			folders[folderName] = folders[folderName] or {}
+			table.insert(folders[folderName], panelName)
+		end
+	end
+
+	-- Include saved folders even if they are empty (so they show immediately after "Create Folder")
+	folders[ROOT_FOLDER] = folders[ROOT_FOLDER] or {}
+
+	local savedFolders = kgPanels.db.global.foldersByLayout
+		and kgPanels.db.global.foldersByLayout[layoutName]
+	if savedFolders then
+		for folderName, enabled in pairs(savedFolders) do
+			if enabled and folderName and folderName ~= "" then
+				folders[folderName] = folders[folderName] or {}
+			end
+		end
+	end
+
+	-- Sort folders (Root first)
+	local folderNames = {}
+	for folderName in pairs(folders) do
+		table.insert(folderNames, folderName)
+	end
+	table.sort(folderNames, function(a, b)
+		if a == ROOT_FOLDER then return true end
+		if b == ROOT_FOLDER then return false end
+		return a < b
+	end)
+
+	-- Build folder groups + insert folder options + insert panel menus inside
+	local folderOrder = 10
+	for _, folderName in ipairs(folderNames) do
+		local displayName = (folderName == ROOT_FOLDER) and L["Root"] or folderName
+		local folderKey = "folder_" .. self:makeKey(displayName)
+
+		-- Capture stable values for closures
+		local currentFolder = folderName
+		local currentLayout = layoutName
+
+		self.panelList[folderKey] = {
+			type = "group",
+			name = displayName,
+			childGroups = "tree",
+			order = folderOrder,
+			args = {
+				folderOptions = (function()
+					local renameValue = ""
+
+					local function PanelCount()
+						return #(folders[currentFolder] or {})
+					end
+
+					local function FolderHeader()
+						if currentFolder == ROOT_FOLDER then
+							return (L["Root (%d panel(s))."]):format(PanelCount())
+						end
+						return (L["Folder '%s' (%d panel(s))."]):format(currentFolder, PanelCount())
+					end
+
+					return {
+						type = "group",
+						name = L["Folder Options"],
+						guiInline = true,
+						order = 0,
+						args = {
+							headerTitle = {
+								type = "header",
+								name = FolderHeader,
+								order = 0,
+							},
+
+							spacerA = {
+								type = "description",
+								name = " ",
+								order = 0.1,
+							},
+
+							renameLabel = {
+								type = "description",
+								name = L["Rename folder"],
+								order = 1,
+							},
+
+							renameInput = {
+								type = "input",
+								name = "",
+								order = 2,
+								width = "double",
+								disabled = function() return currentFolder == ROOT_FOLDER end,
+								get = function() return renameValue end,
+								set = function(info, val) renameValue = val or "" end,
+							},
+
+							renameButton = {
+								type = "execute",
+								name = L["Rename"],
+								order = 3,
+								width = "half",
+								disabled = function()
+									local v = strtrim(renameValue or "")
+									return currentFolder == ROOT_FOLDER or v == "" or v == currentFolder
+								end,
+								func = function()
+									local v = strtrim(renameValue or "")
+									if v == "" or v == currentFolder then return end
+									kgPanelsConfig:RenameFolder(currentFolder, v, currentLayout)
+									renameValue = ""
+									kgPanelsConfig:InitPanelMenus()
+								end,
+							},
+
+							spacerB = {
+								type = "description",
+								name = " ",
+								order = 4,
+							},
+
+							deleteHeader = {
+								type = "header",
+								name = L["Delete folder"],
+								order = 5,
+							},
+
+							deleteHint = {
+								type = "description",
+								name = L["Panels inside will be moved to Root."],
+								order = 6,
+							},
+
+							deleteButton = {
+								type = "execute",
+								name = L["Delete..."],
+								order = 7,
+								width = "half",
+								disabled = function() return currentFolder == ROOT_FOLDER end,
+								confirm = function()
+									return L["Delete this folder? Panels inside will be moved to Root."]
+								end,
+								func = function()
+									kgPanelsConfig:DeleteFolder(currentFolder, currentLayout)
+									kgPanelsConfig:InitPanelMenus()
+								end,
+							},
+						},
+					}
+				end)(),
+			},
+		}
+
+		-- Sort panels inside folder
+		table.sort(folders[folderName])
+
+		-- Insert panels directly under the folder (no "Panels" subgroup)
+		local targetArgs = self.panelList[folderKey].args
+		local panelOrder = 10
+
+		for _, panelName in ipairs(folders[folderName]) do
+			local panelData = layoutdata[panelName]
+			self:CreatePanelMenu(panelName, panelData, false, targetArgs)
+
+			-- Force panels to appear after folderOptions
+			local k = self:makeKey(panelName)
+			if targetArgs[k] then
+				targetArgs[k].order = panelOrder
+				panelOrder = panelOrder + 1
+			end
+		end
+
+		folderOrder = folderOrder + 1
+	end
+
+	-- Notify once after rebuilding the full tree
+	cfgreg:NotifyChange("kgPanelsConfig")
 end
+
 
 --[[
 	Called by our config menu when the user asks to create a new panel
@@ -201,7 +404,7 @@ end
 --[[
 	Create a option menu for a panel, and insert it into our configuration menu table
 ]]
-function kgPanelsConfig:CreatePanelMenu(panelName, panelData, isDefault)
+function kgPanelsConfig:CreatePanelMenu(panelName, panelData, isDefault, parentArgsTable)
 	--local panelData = data or self.activePanels[panelName]
 	local _copy_src = nil
 	local _panel_src = nil
@@ -1588,6 +1791,7 @@ function kgPanelsConfig:CreatePanelMenu(panelName, panelData, isDefault)
 		self.defaultOptions.args.Default.get = tempPanelMenu.get
 
 	else
-		self.panelList[self:makeKey(panelName)] = tempPanelMenu
+		local parent = parentArgsTable or self.panelList
+		parent[self:makeKey(panelName)] = tempPanelMenu
 	end
 end

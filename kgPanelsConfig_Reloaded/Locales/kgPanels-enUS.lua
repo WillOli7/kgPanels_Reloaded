@@ -430,55 +430,26 @@ L["Y Offset"] = true
 L["Y offset. NOTE: positive for right, negative for left."] = "Y offset. NOTE: Positive for right, negative for left."
 L["Y offsetting, positive for up, negative for down."] = true
 
+L["Folder Creation"] = "Folder Creation"
+L["Folder Name"] = "Folder Name"
+L["Create a folder to organize your active panels (UI only, safe for existing layouts)."] = "Create a folder to organize your active panels (UI only, safe for existing layouts)."
+L["Create a new folder in the current layout."] = "Create a new folder in the current layout."
+L["Delete Folder"] = "Delete Folder"
+L["Delete..."] = "Delete..."
+L["Delete this folder? Panels inside will be moved to Root."] = "Delete this folder? Panels inside will be moved to Root."
+L["Delete a folder. Panels inside will be moved back to Root."] = "Delete a folder. Panels inside will be moved back to Root."
+L["Rename Folder (from)"] = "Rename Folder (from)"
+L["Rename Folder (to)"] = "Rename Folder (to)"
+L["Rename this folder? Panels inside will be updated."] = "Rename this folder? Panels inside will be updated."
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+L["Root"] = "Root"
+L["Panels"] = "Panels"
+L["Folder Options"] = "Folder Options"
+L["Rename folder"] = "Rename folder"
+L["Rename"] = "Rename"
+L["Delete folder"] = "Delete folder"
+L["Delete..."] = "Delete..."
+L["Panels inside will be moved to Root."] = "Panels inside will be moved to Root."
+L["Delete this folder? Panels inside will be moved to Root."] = "Delete this folder? Panels inside will be moved to Root."
+L["Folder '%s' (%d panel(s))."] = "Folder '%s' (%d panel(s))."
+L["Root (%d panel(s))."] = "Root (%d panel(s))."
