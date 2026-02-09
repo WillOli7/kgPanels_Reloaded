@@ -16,6 +16,7 @@ local kgPanelsConfig = kgPanels:NewModule("kgPanelsConfig")
 local L = LibStub("AceLocale-3.0"):GetLocale("kgPanels", false)
 local cfgreg = LibStub("AceConfigRegistry-3.0")
 local serializer = LibStub("AceSerializer-3.0")
+local ROOT_FOLDER = "__ROOT__"
 
 local function IsClassic()
 	return WOW_PROJECT_ID == WOW_PROJECT_CLASSIC
@@ -109,7 +110,7 @@ local artworkTypes = {
 function kgPanelsConfig:makeOptions()
 return {
 	type = "group",
-	icon = "Interface\\Addons\\kgPanels_Reloaded\\icon.tga",--isn't used atm, but might as well set it
+	icon = "Interface\\Addons\\kgPanels\\icon.tga",--isn't used atm, but might as well set it
 	name = "kgPanels",
 	childGroups = "tree",
 	args = {
@@ -400,6 +401,229 @@ return {
 						}
 					},
 				},
+				folderCreation = {
+					type = "group",
+					name = L["Folder Creation"],
+					guiInline = true,
+					order = 1,
+					args = {
+						addFolderName = {
+							type = "input",
+							name = L["Folder Name"],
+							desc = L["Create a folder to organize your active panels (UI only, safe for existing layouts)."],
+							order = 1,
+							width = "full",
+							get = function() return kgPanelsConfig._newFolderName or "" end,
+							set = function(info, val) kgPanelsConfig._newFolderName = val end,
+						},
+						createFolder = {
+							type = "execute",
+							name = L["Create"],
+							desc = L["Create a new folder in the current layout."],
+							order = 2,
+							width = "half",
+							disabled = function()
+								local v = strtrim(kgPanelsConfig._newFolderName or "")
+								return v == "" or (kgPanelsConfig.activeLayout == L["None"])
+							end,
+							func = function()
+								local layoutName = kgPanelsConfig.activeLayout
+								if not layoutName or layoutName == L["None"] then return end
+								local fname = strtrim(kgPanelsConfig._newFolderName or "")
+								if fname == "" then return end
+
+								kgPanels.db.global.foldersByLayout = kgPanels.db.global.foldersByLayout or {}
+								kgPanels.db.global.foldersByLayout[layoutName] = kgPanels.db.global.foldersByLayout[layoutName] or {}
+								kgPanels.db.global.foldersByLayout[layoutName][fname] = true
+
+								kgPanelsConfig._newFolderName = nil
+								kgPanelsConfig:InitPanelMenus()
+								cfgreg:NotifyChange("kgPanelsConfig")
+							end,
+						},
+
+						sep1 = { type = "header", name = "", order = 3 },
+
+						deleteFolderName = {
+							type = "select",
+							name = L["Delete Folder"],
+							desc = L["Delete a folder. Panels inside will be moved back to Root."],
+							order = 4,
+							width = "full",
+							style = "dropdown",
+							values = function()
+								local layoutName = kgPanelsConfig.activeLayout
+								local values = {}
+								if not layoutName or layoutName == L["None"] then return values end
+
+								local set = {}
+
+								-- persisted folders
+								local saved = kgPanels.db.global.foldersByLayout and kgPanels.db.global.foldersByLayout[layoutName]
+								if saved then
+									for fname, enabled in pairs(saved) do
+										if enabled and fname and fname ~= "" then set[fname] = true end
+									end
+								end
+
+								-- detected folders from panels
+								local layoutdata = kgPanels.db.global.layouts and kgPanels.db.global.layouts[layoutName]
+								if layoutdata then
+									for _, pData in pairs(layoutdata) do
+										if type(pData) == "table" and pData.folder and pData.folder ~= "" then
+											set[pData.folder] = true
+										end
+									end
+								end
+
+								local list = {}
+								for fname in pairs(set) do
+									if fname ~= "__ROOT__" and fname ~= "Root" then
+										table.insert(list, fname)
+									end
+								end
+								table.sort(list)
+								for _, fname in ipairs(list) do
+									values[fname] = fname
+								end
+								return values
+							end,
+							get = function() return kgPanelsConfig._deleteFolderName end,
+							set = function(info, val) kgPanelsConfig._deleteFolderName = val end,
+						},
+						deleteFolder = {
+							type = "execute",
+							name = L["Delete..."],
+							order = 5,
+							width = "half",
+							disabled = function()
+								return not kgPanelsConfig._deleteFolderName or kgPanelsConfig._deleteFolderName == ""
+							end,
+							confirm = true,
+							confirmText = L["Delete this folder? Panels inside will be moved to Root."],
+							func = function()
+								local layoutName = kgPanelsConfig.activeLayout
+								local fname = kgPanelsConfig._deleteFolderName
+								if not layoutName or layoutName == L["None"] or not fname or fname == "" then return end
+
+								-- remove from saved list
+								local saved = kgPanels.db.global.foldersByLayout and kgPanels.db.global.foldersByLayout[layoutName]
+								if saved then saved[fname] = nil end
+
+								-- move panels to Root
+								local layoutdata = kgPanels.db.global.layouts and kgPanels.db.global.layouts[layoutName]
+								if layoutdata then
+									for _, pData in pairs(layoutdata) do
+										if type(pData) == "table" and pData.folder == fname then
+											pData.folder = nil
+										end
+									end
+								end
+
+								kgPanelsConfig._deleteFolderName = nil
+								kgPanelsConfig:InitPanelMenus()
+								cfgreg:NotifyChange("kgPanelsConfig")
+							end,
+						},
+
+						sep2 = { type = "header", name = "", order = 6 },
+
+						renameFolderOld = {
+							type = "select",
+							name = L["Rename Folder (from)"],
+							order = 7,
+							width = "full",
+							style = "dropdown",
+							values = function()
+								local layoutName = kgPanelsConfig.activeLayout
+								local values = {}
+								if not layoutName or layoutName == L["None"] then return values end
+
+								local set = {}
+
+								local saved = kgPanels.db.global.foldersByLayout and kgPanels.db.global.foldersByLayout[layoutName]
+								if saved then
+									for fname, enabled in pairs(saved) do
+										if enabled and fname and fname ~= "" then set[fname] = true end
+									end
+								end
+
+								local layoutdata = kgPanels.db.global.layouts and kgPanels.db.global.layouts[layoutName]
+								if layoutdata then
+									for _, pData in pairs(layoutdata) do
+										if type(pData) == "table" and pData.folder and pData.folder ~= "" then
+											set[pData.folder] = true
+										end
+									end
+								end
+
+								local list = {}
+								for fname in pairs(set) do
+									if fname ~= "__ROOT__" and fname ~= "Root" then
+										table.insert(list, fname)
+									end
+								end
+								table.sort(list)
+								for _, fname in ipairs(list) do
+									values[fname] = fname
+								end
+
+								return values
+							end,
+							get = function() return kgPanelsConfig._renameFolderOld end,
+							set = function(info, val) kgPanelsConfig._renameFolderOld = val end,
+						},
+						renameFolderNew = {
+							type = "input",
+							name = L["Rename Folder (to)"],
+							order = 8,
+							width = "full",
+							get = function() return kgPanelsConfig._renameFolderNew or "" end,
+							set = function(info, val) kgPanelsConfig._renameFolderNew = val end,
+						},
+						renameFolder = {
+							type = "execute",
+							name = L["Rename"],
+							order = 9,
+							width = "half",
+							disabled = function()
+								local old = kgPanelsConfig._renameFolderOld
+								local newv = strtrim(kgPanelsConfig._renameFolderNew or "")
+								return (not old) or old == "" or newv == "" or newv == old
+							end,
+							confirm = true,
+							confirmText = L["Rename this folder? Panels inside will be updated."],
+							func = function()
+								local layoutName = kgPanelsConfig.activeLayout
+								local old = kgPanelsConfig._renameFolderOld
+								local newv = strtrim(kgPanelsConfig._renameFolderNew or "")
+								if not layoutName or layoutName == L["None"] or not old or old == "" or newv == "" then return end
+								if old == newv then return end
+
+								kgPanels.db.global.foldersByLayout = kgPanels.db.global.foldersByLayout or {}
+								kgPanels.db.global.foldersByLayout[layoutName] = kgPanels.db.global.foldersByLayout[layoutName] or {}
+								local saved = kgPanels.db.global.foldersByLayout[layoutName]
+								saved[old] = nil
+								saved[newv] = true
+
+								local layoutdata = kgPanels.db.global.layouts and kgPanels.db.global.layouts[layoutName]
+								if layoutdata then
+									for _, pData in pairs(layoutdata) do
+										if type(pData) == "table" and pData.folder == old then
+											pData.folder = newv
+										end
+									end
+								end
+
+								kgPanelsConfig._renameFolderOld = nil
+								kgPanelsConfig._renameFolderNew = nil
+								kgPanelsConfig:InitPanelMenus()
+								cfgreg:NotifyChange("kgPanelsConfig")
+							end,
+						},
+					},
+				},
+
 			},
 		},
 		faq = {
@@ -657,6 +881,154 @@ function kgPanelsConfig:uniqueName(name, tbl, val)
 		return name
 	end
 end
+
+-- Folder helpers (required by InitPanelMenus folder options)
+
+function kgPanelsConfig:EnsureFoldersTable(layoutName)
+	kgPanels.db.global.foldersByLayout = kgPanels.db.global.foldersByLayout or {}
+	kgPanels.db.global.foldersByLayout[layoutName] = kgPanels.db.global.foldersByLayout[layoutName] or {}
+	return kgPanels.db.global.foldersByLayout[layoutName]
+end
+
+function kgPanelsConfig:GetPanelFolder(panelData)
+	if type(panelData) ~= "table" or not panelData.folder or panelData.folder == "" then
+		return ROOT_FOLDER
+	end
+	return panelData.folder
+end
+
+function kgPanelsConfig:DeleteFolder(folderName, layoutName)
+	if not folderName or folderName == "" then return end
+	if folderName == ROOT_FOLDER then return end
+
+	layoutName = layoutName or self.activeLayout
+	local layoutdata = kgPanels.db.global.layouts[layoutName]
+	if not layoutdata then return end
+
+	-- Move panels back to Root
+	for panelName, panelData in pairs(layoutdata) do
+		if type(panelData) == "table" then
+			local f = self:GetPanelFolder(panelData)
+			if f == folderName then
+				panelData.folder = nil
+			end
+		end
+	end
+
+	-- Remove folder from saved list
+	local t = self:EnsureFoldersTable(layoutName)
+	t[folderName] = nil
+
+	cfgreg:NotifyChange("kgPanelsConfig")
+end
+
+function kgPanelsConfig:RenameFolder(oldName, newName, layoutName)
+	oldName = strtrim(oldName or "")
+	newName = strtrim(newName or "")
+
+	if oldName == "" or newName == "" then return end
+	if oldName == ROOT_FOLDER then return end
+	if oldName == newName then return end
+
+	layoutName = layoutName or self.activeLayout
+	local layoutdata = kgPanels.db.global.layouts[layoutName]
+	if not layoutdata then return end
+
+	-- Move panels to new folder name
+	for panelName, panelData in pairs(layoutdata) do
+		if type(panelData) == "table" then
+			local f = self:GetPanelFolder(panelData)
+			if f == oldName then
+				panelData.folder = newName
+			end
+		end
+	end
+
+	-- Update saved folders table
+	local t = self:EnsureFoldersTable(layoutName)
+	t[oldName] = nil
+	t[newName] = true
+
+	cfgreg:NotifyChange("kgPanelsConfig")
+end
+
+function kgPanelsConfig:GetLayoutFolders(layoutName, includeRoot)
+	layoutName = layoutName or self.activeLayout
+	local values = {}
+	local set = {}
+
+	if includeRoot then
+		values[ROOT_FOLDER] = L["Root"]
+	end
+
+	if not layoutName or layoutName == L["None"] then
+		return values
+	end
+
+	local saved = kgPanels.db.global.foldersByLayout and kgPanels.db.global.foldersByLayout[layoutName]
+	if saved then
+		for folderName, enabled in pairs(saved) do
+			if enabled and folderName and folderName ~= "" then
+				set[folderName] = true
+			end
+		end
+	end
+
+	local layoutData = kgPanels.db.global.layouts and kgPanels.db.global.layouts[layoutName]
+	if layoutData then
+		for _, panelData in pairs(layoutData) do
+			if type(panelData) == "table" then
+				set[self:GetPanelFolder(panelData)] = true
+			end
+		end
+	end
+
+	set[ROOT_FOLDER] = nil
+
+	local list = {}
+	for folderName in pairs(set) do
+		table.insert(list, folderName)
+	end
+	table.sort(list)
+
+	for _, folderName in ipairs(list) do
+		values[folderName] = folderName
+	end
+
+	return values
+end
+
+function kgPanelsConfig:EnsureFolderExists(folderName, layoutName)
+	folderName = strtrim(folderName or "")
+	if folderName == "" or folderName == ROOT_FOLDER then return end
+
+	layoutName = layoutName or self.activeLayout
+	local folders = self:EnsureFoldersTable(layoutName)
+	folders[folderName] = true
+end
+
+function kgPanelsConfig:MovePanelToFolder(panelName, folderName, layoutName)
+	if not panelName or panelName == "" then return end
+
+	layoutName = layoutName or self.activeLayout
+	local layoutData = kgPanels.db.global.layouts and kgPanels.db.global.layouts[layoutName]
+	if not layoutData then return end
+
+	local panelData = layoutData[panelName]
+	if type(panelData) ~= "table" then return end
+
+	folderName = strtrim(folderName or "")
+	if folderName == "" or folderName == ROOT_FOLDER then
+		panelData.folder = nil
+	else
+		self:EnsureFolderExists(folderName, layoutName)
+		panelData.folder = folderName
+	end
+
+	self:InitPanelMenus()
+	cfgreg:NotifyChange("kgPanelsConfig")
+end
+
 
 function kgPanelsConfig:UpdatePanel(name,w,h,x,y)
 	local layoutdata = kgPanels.db.global.layouts[self.activeLayout]
