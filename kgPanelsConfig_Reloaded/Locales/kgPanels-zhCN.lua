@@ -1,4 +1,4 @@
-﻿--[[
+--[[
 Chinese simplified by Kurax
 ]]
 local L = LibStub("AceLocale-3.0"):NewLocale("kgPanels","zhCN")
@@ -457,3 +457,9 @@ L["Y Offset"] = "垂直偏移"
 L["Y offset. NOTE: positive for right, negative for left."] = "垂直偏移量。注意：正数向右，负数向左。"
 L["Y offsetting, positive for up, negative for down."] = "垂直偏移量。注意：正数向上，负数向下。"
 
+L["Folder Settings"] = "Folder Settings"
+L["Current folder: %s"] = "Current folder: %s"
+L["Folder Name (create / assign)"] = "Folder Name (create / assign)"
+L["Move to folder"] = "Move to folder"
+L["Move"] = "Move"
+L["OK"] = "OK"
