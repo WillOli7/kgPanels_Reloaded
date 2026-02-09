@@ -468,7 +468,7 @@ L["Rename Folder (from)"] = "Renommer le dossier (depuis)"
 L["Rename Folder (to)"] = "Renommer le dossier (vers)"
 L["Rename this folder? Panels inside will be updated."] = "Renommer ce dossier ? Les panneaux seront mis à jour."
 
-L["Root"] = "Racine"
+L["Root"] = "Dossier par défaut"
 L["Panels"] = "Panneaux"
 L["Folder Options"] = "Options du dossier"
 L["Rename folder"] = "Renommer le dossier"
