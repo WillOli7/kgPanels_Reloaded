@@ -58,8 +58,12 @@ Point technique : un addon ne peut lire que son propre fichier de sauvegarde (fi
 
 | Phase | Contenu | Statut |
 |---|---|---|
-| 1 | Librairies : mises à jour, suppressions, ajouts (`Libs-VERSIONS.md`, `tools/check-libs.sh`) | ✅ sur la branche `v1/phase1-libs` (non commité) |
-| 2 | Nouvelle structure et réécriture du code | 🔍 |
+| 1 | Librairies : mises à jour, suppressions, ajouts (`Libs-VERSIONS.md`, `tools/check-libs.sh`) | ✅ branche `v1/phase1-libs` |
+| 2a | Moteur nxPanels : données, migration, rendu, bordures, ancrages, scripts, commandes, minicarte, tests hors jeu | 🚧 branche `v1/phase2-core` — en test local |
+| 2b | Fenêtre de configuration (`nxPanels_Options`) + mode édition | 🔍 |
+| 2c | Nouvelles options (visibilité, animations, masques…) | 💡 |
+
+**Nom : nxPanels** (« next »), licence **GPLv3**, décidés le 2026-09-27.
 
 ---
 

@@ -1,33 +1,8 @@
-## Interface: 120000, 120001
-## Notes: Configuration for kgPanels
-## Title: kgPanelsConfig_Reloaded
-## Version: v0.4.0
-## Author: kagaro, EvilElvis, Adna
-## RequiredDeps: kgPanels_Reloaded
-## X-Category: Interface Enhancements
-## X-License: All Rights Reserved
-## X-Curse-Project-ID: 1444518
-## IconTexture: Interface\AddOns\kgPanels_Reloaded\media\icon.tga
-## OptionalDeps: Ace3, LibSharedMedia-3.0, AceGUI-3.0-SharedMediaWidgets
-
-## Category: User Interface
-## Category-deDE: Benutzerinterface
-## Category-esES: Interfaz de usuario
-## Category-esMX: Interfaz de usuario
-## Category-frFR: Interface utilisateur
-## Category-itIT: Interfaccia utente
-## Category-koKR: 사용자 인터페이스
-## Category-ptBR: Interface do usuário
-## Category-ruRU: Интерфейс пользователя
-## Category-zhCN: 用户界面
-## Category-zhTW: 使用者介面
-
-embeds.xml
-Locales.xml
-
-kgPanelsConfig_Reloaded.lua
-kgPanelGuideFrame.lua
-ArtHelper.lua
-PanelHelper.lua
-LayoutHelper.lua
-
+## Interface: 120000, 120001, 120005, 120007, 120100, 16001
+## Title: kgPanelsConfig Reloaded |cff888888(replaced by nxPanels)|r
+## Notes: Empty placeholder: the configuration is now part of nxPanels. You can delete this folder.
+## Notes-frFR: Dossier vide : la configuration fait désormais partie de nxPanels. Vous pouvez supprimer ce dossier.
+## Author: Adna
+## Version: 1.0.0-alpha.1
+## X-License: GPL-3.0-or-later
+## LoadOnDemand: 1

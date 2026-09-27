@@ -1,86 +1,61 @@
-# kgPanels_Reloaded
+# nxPanels
 
-**kgPanels_Reloaded** is a modern, community-maintained continuation of the original **kgPanels** addon for World of Warcraft.
+**nxPanels** adds artistic panels to your World of Warcraft interface: backgrounds, borders, text and scripts, placed anywhere and attached to any frame.
 
-The goal of this project is to preserve the flexibility and power of kgPanels while ensuring compatibility with current and future game versions, fixing legacy issues, and providing ongoing maintenance.
+It is the next generation of kgPanels: a full rewrite with its own code, built for today's clients.
 
----
+> 🚧 **Alpha.** The display engine and the migration are ready; the configuration window comes in the next milestone.
 
-## ✨ Features
+## Supported clients
 
-- Create and manage fully customizable UI panels
-- Flexible system for layouts, textures, and borders
-- Compatibility with existing kgPanels configurations
-- Updated codebase for modern WoW versions
-- Community-driven maintenance and improvements
+| Client | Interface |
+|---|---|
+| Retail (The War Within / Midnight, 12.x) | 120000 – 120100 |
+| WoW Forever | 16001 |
 
----
+Every language is supported, including Simplified and Traditional Chinese: text uses the font of your client language by default.
 
-## 📦 Installation
+## Coming from kgPanels or kgPanels Reloaded
 
-1. Download the latest release.
-2. Extract the following folders into:
-World of Warcraft/retail/Interface/AddOns/
+Nothing to do: on the first start, nxPanels imports your layouts, panels, folders, profiles and custom art automatically, then disables the old addon. Your old data is never modified.
 
-3. Ensure you have:
-kgPanels_Reloaded
-kgPanelsConfig_Reloaded
+- **kgPanels Reloaded**: install nxPanels over it. The package replaces the old folders with a small `kgPanels_Reloaded` bridge used for the import.
+- **Original kgPanels**: keep it enabled for the first start of nxPanels, it is detected and imported.
+- Import again at any time with `/nxp import` (added as new layouts).
 
-4. Launch the game and enable the addons.
+## Commands
 
-## ⚠️ Important – Configuration file rename
+`/nxpanels` or `/nxp`:
 
-If you were previously using the original **kgPanels** addon, you must rename your existing configuration file before launching the game.
+| Command | Action |
+|---|---|
+| `layouts` | list your layouts |
+| `layout <name>` | activate a layout |
+| `enable` / `disable` / `toggle` | show or hide the panels |
+| `import` | import kgPanels data again |
+| `minimap` | show or hide the minimap button |
+| `status` | version and diagnostics |
 
-Please rename:
+The minimap button and the addon compartment open a layout menu (left-click) and toggle the panels (right-click).
 
-World of Warcraft\retail_\WTF\Account\ACCOUNTBNET\SavedVariables\kgPanels.lua  
-to  
-World of Warcraft\retail_\WTF\Account\ACCOUNTBNET\SavedVariables\kgPanels_Reloaded.lua
+## For script authors
 
-This ensures that your existing profiles and layouts are correctly loaded by **kgPanels_Reloaded**.
+Panel scripts keep working: `self.bg`, `self.text`, `kgPanels:FetchFrame(name)`, `arg1`… and the `pressed` / `released` variables of OnClick. The new API is available as `nxPanels` (`GetPanelFrame`, `GetActiveLayout`, `ActivateLayout`). Every panel frame is also reachable as `nxPanel_<id>`.
 
-Failure to rename this file may result in missing or reset configurations.
+A failing script is reported once and switched off until the next reload.
 
----
+## Development
 
-## ⚙️ Usage
+| Tool | Command |
+|---|---|
+| Offline tests (LuaJIT) | `bash tools/tests/run-all.sh path/to/luajit` |
+| Library versions | `bash tools/check-libs.sh` |
+| Local install (Retail + Forever beta) | `bash tools/deploy.sh all` |
 
-Open the configuration interface with:
-/kgpanels config
+Embedded libraries and their versions: [Libs-VERSIONS.md](Libs-VERSIONS.md). Roadmap and ideas: [docs/ROADMAP.md](docs/ROADMAP.md).
 
+## License and credits
 
-Use the UI to create, edit, and manage panels.
+nxPanels is free software under the [GNU GPL v3 or later](LICENSE). It will always be free, in game and outside.
 
----
-
-## 🔄 Compatibility
-
-- Designed as a continuation of the original **kgPanels**
-- Preserves existing layouts and profiles
-- Minimal manual migration required
-
----
-
-## 🛠 Development Status
-
-🚧 **Work in progress**
-
-The addon is actively developed.  
-Bug fixes, refactoring, and improvements are ongoing.
-
----
-
-## 📜 Credits
-
-- **kagaro** — Original author of kgPanels  
-- **Community contributors** — Testing, fixes, and maintenance
-
-This is an unofficial continuation created to support the community.
-
----
-
-## 🔗 Links
-
-- Original addon: https://www.curseforge.com/wow/addons/kg-panels  
-- GitHub: https://github.com/WillOli7/kgPanels_Reloaded
+Thanks to **kagaro** (kgPanels) and to the authors of **eePanels**, whose addons inspired this project. nxPanels does not reuse their code.

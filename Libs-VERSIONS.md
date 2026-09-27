@@ -4,7 +4,7 @@ Les librairies sont intégrées directement dans l'addon. Avant chaque release, 
 
 Dernière mise à jour : 2026-09-27
 
-## Socle — `kgPanels_Reloaded/Libs`
+## Socle — `nxPanels/Libs`
 
 | Librairie | Version (MINOR) | Source | Révision |
 |---|---|---|---|
@@ -20,7 +20,7 @@ Dernière mise à jour : 2026-09-27
 | LibDataBroker-1.1 | 4 | [WowAce SVN (libdbicon)](https://repos.wowace.com/wow/libdbicon-1-0/trunk/) | trunk r162 |
 | LibDBIcon-1.0 | 56 | [WowAce SVN](https://repos.wowace.com/wow/libdbicon-1-0/trunk/) | trunk r162 |
 
-## Configuration — `kgPanelsConfig_Reloaded/Libs`
+## Configuration — `nxPanels_Options/Libs`
 
 Conservées pendant la transition, jusqu'à la nouvelle interface de configuration.
 

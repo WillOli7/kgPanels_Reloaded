@@ -4,8 +4,8 @@
 
 cd "$(dirname "$0")/.." || exit 1
 
-CORE=kgPanels_Reloaded/Libs
-CONF=kgPanelsConfig_Reloaded/Libs
+CORE=nxPanels/Libs
+CONF=nxPanels_Options/Libs
 ACE=https://raw.githubusercontent.com/WoWUIDev/Ace3/master
 SVN=https://repos.wowace.com/wow
 

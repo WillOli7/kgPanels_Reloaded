@@ -1,0 +1,40 @@
+local L = LibStub("AceLocale-3.0"):NewLocale("nxPanels", "zhCN")
+if not L then return end
+
+-- 待母语玩家校对
+L["LIB_MISSING"] = "缺少库 %s。请重新安装 nxPanels。"
+L["ENABLED"] = "面板已启用。"
+L["DISABLED"] = "面板已禁用。"
+L["LAYOUT_ACTIVE"] = "当前布局：%s"
+L["LAYOUT_NONE"] = "没有启用的布局。"
+L["LAYOUT_NOT_FOUND"] = "未找到布局：%s"
+L["LAYOUT_LIST"] = "布局列表："
+L["LAYOUT_LIST_ITEM"] = "%s（%d 个面板）"
+L["NO_LAYOUTS"] = "暂无布局。"
+L["STATUS"] = "版本 %s，%s 客户端。当前布局：%s。已显示面板：%d，等待框体：%d。"
+L["CLIENT_RETAIL"] = "正式服"
+L["CLIENT_FOREVER"] = "魔兽世界：永恒"
+L["CLIENT_OTHER"] = "不支持的"
+L["OPTIONS_SOON"] = "设置窗口将在下一阶段推出。目前请使用 /nxp help。"
+L["MENU_SHOW"] = "显示面板"
+
+L["HELP_TITLE"] = "命令（/nxpanels 或 /nxp）："
+L["HELP_LAYOUTS"] = "layouts：列出你的布局"
+L["HELP_LAYOUT"] = "layout <名称>：启用一个布局"
+L["HELP_TOGGLE"] = "enable / disable：显示或隐藏所有面板"
+L["HELP_IMPORT"] = "import：再次导入 kgPanels 数据（作为新布局）"
+L["HELP_MINIMAP"] = "minimap：显示或隐藏小地图按钮"
+L["HELP_STATUS"] = "status：版本与诊断信息"
+
+L["MIGRATED"] = "已从 %3$s 导入 %1$d 个布局和 %2$d 个面板。"
+L["MIGRATE_NOTHING"] = "没有找到可导入的 kgPanels 数据。"
+L["MIGRATE_POPUP"] = "nxPanels 已导入你的 kgPanels 布局。\n\n旧插件已被禁用。现在重新加载界面以完成吗？"
+L["RELOAD"] = "重新加载"
+L["LATER"] = "稍后"
+
+L["SCRIPT_ERROR"] = "面板 |cffffd100%s|r（%s）的脚本出错：%s。该脚本在下次重新加载前已被禁用。"
+L["SCRIPT_COMPILE_ERROR"] = "面板 |cffffd100%s|r（%s）的脚本无法编译：%s"
+L["ANCHOR_CYCLE"] = "面板 |cffffd100%s|r：检测到循环锚点，已改为锚定到屏幕。"
+
+L["MINIMAP_TOOLTIP_LEFT"] = "|cffffd100左键：|r显示布局列表"
+L["MINIMAP_TOOLTIP_RIGHT"] = "|cffffd100右键：|r显示或隐藏面板"
