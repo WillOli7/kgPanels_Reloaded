@@ -8,7 +8,7 @@
 ## X-License: All Rights Reserved
 ## X-Curse-Project-ID: 1444518
 ## IconTexture: Interface\AddOns\kgPanels_Reloaded\media\icon.tga
-## OptionalDeps: Ace3, LibSharedMedia-3.0, LibDataBroker-1.1, LibDualSpec-1.0, LibBackdrop-1.0
+## OptionalDeps: Ace3, LibSharedMedia-3.0, LibDualSpec-1.0, LibSerialize, LibDeflate, LibDataBroker-1.1, LibDBIcon-1.0
 
 ## Category: User Interface
 ## Category-deDE: Benutzerinterface
@@ -21,9 +21,6 @@
 ## Category-ruRU: Интерфейс пользователя
 ## Category-zhCN: 用户界面
 ## Category-zhTW: 使用者介面
-
-# Client flavor specific libs
-Libs\LibDualSpec-1.0\LibDualSpec-1.0.lua
 
 embeds.xml
 kgPanels_Reloaded.lua
