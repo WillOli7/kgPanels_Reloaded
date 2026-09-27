@@ -1,5 +1,12 @@
 # kgPanels_Reloaded
 
+> [!IMPORTANT]
+> **This project continues as [nxPanels](https://github.com/WillOli7/nxPanels).**
+> nxPanels is a complete rewrite for Retail and WoW Forever, with Chinese client support and a new configuration window. It imports your kgPanels and kgPanels Reloaded layouts automatically.
+> This repository is archived and kept for reference only.
+>
+> **Ce projet continue sous [nxPanels](https://github.com/WillOli7/nxPanels).** Ce dépôt est archivé et conservé pour référence.
+
 **kgPanels_Reloaded** is a modern, community-maintained continuation of the original **kgPanels** addon for World of Warcraft.
 
 The goal of this project is to preserve the flexibility and power of kgPanels while ensuring compatibility with current and future game versions, fixing legacy issues, and providing ongoing maintenance.
